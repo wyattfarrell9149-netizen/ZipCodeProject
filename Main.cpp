@@ -1,78 +1,290 @@
 /** @file Main.cpp
- * @brief Gather sequential ZIP records and print alphabetical state extremes.
+ * @brief Build ZIP data and index files, look up ZIP codes, or print state extremes.
  */
 #include "Buffer.h"
+#include "IndexEntry.h"
 #include "State.h"
+#include "SequenceSet.h"
+#include <algorithm>
+#include <charconv>
+#include <filesystem>
 #include <iomanip>
 #include <iostream>
 #include <map>
-#include "IndexEntry.h" //for Part 2
-#include <vector>
+#include <stdexcept>
+#include <string_view>
 
-/** @brief Run the ZIP code application
+namespace fs = std::filesystem;
+
+/** @brief Check whether a key is exactly five ASCII digits. */
+static bool isZip(std::string_view zip) {
+    return zip.size() == 5 && std::all_of(zip.begin(), zip.end(), [](char digit) {
+        return digit >= '0' && digit <= '9';
+    });
+}
+
+/** @brief Stream records into the indexed data file and write the sorted primary index.
+ * @param csvPath Source CSV, in any supported column order.
+ * @param dataPath Destination .txt or .zdat file. Text data uses a companion _index.txt file.
+ */
+static void buildIndex(const std::string& csvPath, const fs::path& dataPath) {
+    const bool textFilename = dataPath.extension() == ".txt";
+    if (!textFilename && dataPath.extension() != ".zdat")
+        throw std::runtime_error("Use a .txt or .zdat filename for indexed data");
+
+    Buffer buffer(csvPath);
+    DataHeader header;
+    header.indexFilename = textFilename ? dataPath.stem().string() + "_index.txt"
+                                        : dataPath.filename().string() + ".idx";
+    std::ofstream data(dataPath, std::ios::binary);
+    if (!data) throw std::runtime_error("Cannot create indexed data: " + dataPath.string());
+    HeaderBuffer::write(data, header);
+
+    std::vector<IndexEntry> zipIndex;
+    ZipCodeRecord record;
+    while (buffer.next(record)) {
+        const auto offset = data.tellp();
+        Buffer::writeRecord(data, record);
+        zipIndex.push_back({record.zip, offset});
+    }
+
+    std::sort(zipIndex.begin(), zipIndex.end(), [](const IndexEntry& left, const IndexEntry& right) {
+        return left.zip < right.zip;
+    });
+    for (std::size_t i = 1; i < zipIndex.size(); ++i) {
+        if (zipIndex[i - 1].zip == zipIndex[i].zip)
+            throw std::runtime_error("Duplicate primary key: " + zipIndex[i].zip);
+    }
+
+    // The fixed-width record count lets us update the header without moving any records.
+    header.recordCount = zipIndex.size();
+    data.seekp(0);
+    HeaderBuffer::write(data, header);
+    data.close();
+    if (!data) throw std::runtime_error("Could not finish writing indexed data");
+
+    std::ofstream indexFile(dataPath.parent_path() / header.indexFilename);
+    if (!indexFile) throw std::runtime_error("Cannot create companion index");
+    for (const auto& entry : zipIndex)
+        indexFile << entry.zip << ',' << entry.offset << '\n';
+    indexFile.close();
+    if (!indexFile) throw std::runtime_error("Could not finish writing companion index");
+
+    std::cout << "Indexed " << header.recordCount << " ZIP codes in " << dataPath.string() << '\n';
+}
+
+/** @brief Load sorted ZIP keys and offsets from the companion file.
+ * @param dataPath Path to the indexed data file.
+ * @param header Data header with the index filename, record count, and minimum offset.
+ * @return Sorted primary index for binary search.
+ */
+static std::vector<IndexEntry> loadIndex(const fs::path& dataPath, const DataHeader& header) {
+    const auto indexPath = dataPath.parent_path() / header.indexFilename;
+    std::ifstream input(indexPath);
+    if (!input) throw std::runtime_error("Cannot open companion index: " + indexPath.string());
+
+    std::vector<IndexEntry> index;
+    std::string line;
+    while (std::getline(input, line)) {
+        if (!line.empty() && line.back() == '\r') line.pop_back();
+        const std::string zip = line.substr(0, 5);
+        if (line.size() < 7 || !isZip(zip) || line[5] != ',' ||
+            !std::all_of(line.begin() + 6, line.end(), [](char c) { return c >= '0' && c <= '9'; }) ||
+            (!index.empty() && index.back().zip >= zip))
+            throw std::runtime_error("Invalid or unsorted companion index entry");
+
+        std::size_t used;
+        const auto offset = std::stoll(line.substr(6), &used);
+        if (offset < header.headerSize || used != line.size() - 6 || index.size() >= header.recordCount)
+            throw std::runtime_error("Invalid companion index offset or record count");
+
+        index.push_back({zip, offset});
+    }
+    if (input.bad() || index.size() != header.recordCount)
+        throw std::runtime_error("Companion index does not match the data header");
+    return index;
+}
+
+/** @brief Quote text and show embedded line breaks without splitting a record. */
+static std::string displayText(const std::string& text) {
+    std::string quoted = "\"";
+    for (char c : text) {
+        switch (c) {
+            case '\n': quoted += "\\n"; break;
+            case '\r': quoted += "\\r"; break;
+            case '"': quoted += "\\\""; break;
+            case '\\': quoted += "\\\\"; break;
+            default: quoted += c;
+        }
+    }
+    return quoted + '"';
+}
+
+/** @brief Format a coordinate with the shortest decimal that round-trips to its value. */
+static std::string displayCoordinate(double value) {
+    char digits[64];
+    const auto result = std::to_chars(digits, digits + sizeof(digits), value);
+    if (result.ec != std::errc{}) throw std::runtime_error("Could not format coordinate");
+    return std::string(digits, result.ptr);
+}
+
+/** @brief Load the index, then seek to and print one record per matching -Z option.
+ * @param dataPath Path to the length-indicated data file.
+ * @param first Beginning of the command-line search options.
+ * @param last One past the final option.
+ */
+static int searchZipCodes(const fs::path& dataPath, char* const* first, char* const* last) {
+    for (auto option = first; option != last; ++option) {
+        const std::string_view flag(*option);
+        if (flag.substr(0, 2) != "-Z" || !isZip(flag.substr(2))) {
+            std::cerr << "Invalid ZIP search flag: " << flag << " (use -Z followed by five digits)\n";
+            return 2;
+        }
+    }
+
+    DataHeader header;
+    Buffer buffer(dataPath.string(), header);
+    const auto index = loadIndex(dataPath, header);
+    ZipCodeRecord record;
+    for (auto option = first; option != last; ++option) {
+        const std::string_view zip(*option + 2);
+        auto entry = std::lower_bound(index.begin(), index.end(), zip,
+            [](const IndexEntry& candidate, std::string_view key) { return candidate.zip < key; });
+        if (entry == index.end() || entry->zip != zip) {
+            std::cout << "ZIP Code " << zip << " was not found.\n";
+            continue;
+        }
+
+        buffer.readAt(entry->offset, record);
+        if (record.zip != zip) throw std::runtime_error("Companion index points to the wrong ZIP code");
+        std::cout << "ZIP Code: " << record.zip << " | Place Name: " << displayText(record.place)
+                  << " | State: " << record.state << " | County: " << displayText(record.county)
+                  << " | Latitude: " << displayCoordinate(record.latitude)
+                  << " | Longitude: " << displayCoordinate(record.longitude) << '\n';
+    }
+    return 0;
+}
+
+/** @brief Run the original directional-extremes calculation using either input format.
+ * @param buffer Open CSV or indexed data buffer.
+ */
+static void printExtremes(Buffer& buffer) {
+    std::map<std::string, State> states;
+    ZipCodeRecord record;
+    while (buffer.next(record)) {
+        auto it = states.find(record.state);
+        if (it == states.end())
+            states.emplace(record.state, State(record));
+        else
+            it->second.update(record);
+    }
+
+    std::cout << std::left << std::setw(8) << "State"
+              << std::setw(14) << "Easternmost" << std::setw(14) << "Westernmost"
+              << std::setw(14) << "Northernmost" << "Southernmost\n";
+    
+    for (const auto& entry : states) {
+        const auto& state = entry.second;
+        std::cout << std::setw(8) << entry.first
+                  << std::setw(14) << state.east.zip << std::setw(14) << state.west.zip
+                  << std::setw(14) << state.north.zip << state.south.zip << '\n';
+    }
+}
+
+/** @brief Run the original extremes calculation on active sequence set records. */
+static void blockedExtremes(SequenceSet& data) {
+    std::map<std::string, State> states;
+    data.each([&](const ZipCodeRecord& record) {
+        auto position = states.find(record.state);
+        if (position == states.end()) states.emplace(record.state, State(record));
+        else position->second.update(record);
+    });
+    std::cout << std::left << std::setw(8) << "State"
+              << std::setw(14) << "Easternmost" << std::setw(14) << "Westernmost"
+              << std::setw(14) << "Northernmost" << "Southernmost\n";
+    for (const auto& entry : states) {
+        const auto& state = entry.second;
+        std::cout << std::setw(8) << entry.first << std::setw(14) << state.east.zip
+                  << std::setw(14) << state.west.zip << std::setw(14) << state.north.zip
+                  << state.south.zip << '\n';
+    }
+}
+
+/** @brief Parse a nonnegative decimal command-line setting without trailing characters. */
+static unsigned long long setting(const std::string& text) {
+    if (text.empty() || !std::all_of(text.begin(), text.end(), [](char c) { return c >= '0' && c <= '9'; }))
+        throw std::runtime_error("Settings must be unsigned decimal integers");
+    return std::stoull(text);
+}
+
+/** @brief Run the ZIP code application.
  * @param argc Argument count.
- * @param argv Program name and optional input CSV path.
- * @return Zero on success, one for input errors, two for incorrect usage
+ * @param argv Program name and build, search, or extremes arguments.
+ * @return Zero on success, one for data errors, two for incorrect usage.
  */
 int main(int argc, char* argv[]) {
-    if (argc > 2) { std::cerr << "Usage: " << argv[0] << " [input.csv]\n"; return 2; }
-    
     try {
-        Buffer buffer(argc == 2 ? argv[1] : "us_postal_codes.csv"); //
-        std::map<std::string, State> states;
-
-        std::vector<IndexEntry> zipIndex;//Part 2:Creating (in RAM) primary key index
-
-        ZipCodeRecord record;
-
-        //Each itertion gathers one record; the complete input is not stored
-        while (buffer.next(record)) {
-            
-            //New addtion for part 2 >>
-            //creating one index record for current zip code
-            IndexEntry entry;
-            entry.zip = record.zip;
-            entry.offset = 0; //0 is temporary so we can see that the index will exist in ram
-            zipIndex.push_back(entry); //storing the zipcode and index into RAM index
-            //<<
-
-            auto it = states.find(record.state);
-            if (it == states.end()) 
-                states.emplace(record.state, State(record));
-            else 
-                it->second.update(record);
+        if ((argc == 4 || argc == 5 || argc == 6) && std::string_view(argv[1]) == "--block-build") {
+            const auto size = argc >= 5 ? setting(argv[4]) : 512;
+            const auto minimum = argc == 6 ? setting(argv[5]) : 50;
+            if (size > 1048576 || minimum > 50) throw std::runtime_error("Block size or minimum out of range");
+            SequenceSet::build(argv[2], argv[3], size, minimum);
+        } else if (argc == 4 && (std::string_view(argv[1]) == "--add" || std::string_view(argv[1]) == "--delete")) {
+            SequenceSet::update(argv[2], argv[3], std::string_view(argv[1]) == "--add");
+        } else if (argc == 4 && std::string_view(argv[1]) == "--dump") {
+            SequenceSet data(argv[2]);
+            data.dump(argv[3]);
+        } else if (argc == 3 && std::string_view(argv[1]) == "--check") {
+            SequenceSet data(argv[2]);
+            data.validate();
+            std::cout << "PASS: blocks, links, index, counts, and capacity\n";
+        } else if (argc == 3 && std::string_view(argv[1]) == "--block-extremes") {
+            SequenceSet data(argv[2]);
+            blockedExtremes(data);
+        } else if (argc >= 4 && std::string_view(argv[1]) == "--search") {
+            SequenceSet data(argv[2]);
+            for (int i = 3; i < argc; ++i) {
+                const std::string_view flag(argv[i]);
+                if (flag.substr(0, 2) != "-Z" || !isZip(flag.substr(2)))
+                    throw std::runtime_error("Use -Z followed by five digits");
+                ZipCodeRecord record;
+                if (!data.find(std::string(flag.substr(2)), record)) {
+                    std::cout << "ZIP Code " << flag.substr(2) << " was not found.\n";
+                    continue;
+                }
+                std::cout << "ZIP Code: " << record.zip << " | Place Name: " << displayText(record.place)
+                          << " | State: " << record.state << " | County: " << displayText(record.county)
+                          << " | Latitude: " << displayCoordinate(record.latitude)
+                          << " | Longitude: " << displayCoordinate(record.longitude) << '\n';
+            }
+        } else if (argc == 4 && std::string_view(argv[1]) == "--build") {
+            buildIndex(argv[2], argv[3]);
+        } else if (argc == 3 && std::string_view(argv[1]) == "--extremes") {
+            DataHeader header;
+            Buffer buffer(argv[2], header);
+            printExtremes(buffer);
+        } else if (argc >= 3 && argv[1][0] != '-') {
+            return searchZipCodes(argv[1], argv + 2, argv + argc);
+        } else if (argc == 1 || (argc == 2 && argv[1][0] != '-')) {
+            Buffer buffer(argc == 2 ? argv[1] : "us_postal_codes.csv");
+            printExtremes(buffer);
+        } else {
+            std::cerr << "Project 3 commands:\n"
+                      << "  --block-build source.txt blocks.txt [block-bytes=512] [minimum-percent=50]\n"
+                      << "  --search blocks.txt -Z##### [-Z##### ...]\n"
+                      << "  --add blocks.txt records.csv\n  --delete blocks.txt keys.txt\n"
+                      << "  --dump blocks.txt physical|logical|index\n"
+                      << "  --check blocks.txt\n  --block-extremes blocks.txt\n"
+                      << "Project 2 usage:\n"
+                      << "  " << argv[0] << " [input.csv]\n"
+                      << "  " << argv[0] << " --build input.csv output.txt\n"
+                      << "  " << argv[0] << " --extremes input.txt\n"
+                      << "  " << argv[0] << " input.txt -Z##### [-Z##### ...]\n";
+            return 2;
         }
-
-        std::cout << "Index entries: " << zipIndex.size() << std::endl; //Part 2 work
-
-        //Part 2: Write(as a file) >>
-        std::ofstream indexFile("zipcode.idx");// make the index file on disk
-
-        for(const auto & entry : zipIndex){//visit every index entry stored in RAM
-            indexFile << entry.zip << "," << entry.offset << "\n";//writing every RAM index entry into the file
-        }
-        indexFile.close();
-        //<<
-
-        //Part 2: Reading index file back into RAM >>
-        std::vector<IndexEntry> loadedIndex;
-        std::ifstream readIndex("zipcode.idx");
-
-        std::cout << std::left << std::setw(8) << "State"
-                  << std::setw(14) << "Easternmost" << std::setw(14) << "Westernmost"
-                  << std::setw(14) << "Northernmost" << "Southernmost\n";
-        
-        for (const auto& entry : states) {
-            const auto& state = entry.second;
-            std::cout << std::setw(8) << entry.first
-                      << std::setw(14) << state.east.zip << std::setw(14) << state.west.zip
-                      << std::setw(14) << state.north.zip << state.south.zip << '\n';
-        }
-    //part 2
-
-    } 
-    catch (const std::exception& e){ 
-        std::cerr << "Error: " << e.what() << '\n'; return 1;}
-
+    } catch (const std::exception& e) {
+        std::cerr << "Error: " << e.what() << '\n';
+        return 1;
+    }
     return 0;
 }

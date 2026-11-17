@@ -1,0 +1,69 @@
+\doxysection{Sequence\+Set.\+h}
+\hypertarget{SequenceSet_8h_source}{}\label{SequenceSet_8h_source}\mbox{\hyperlink{SequenceSet_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#ifndef\ ZIP\_SEQUENCE\_SET\_H}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#define\ ZIP\_SEQUENCE\_SET\_H}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{Buffer_8h}{Buffer.h}}"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <filesystem>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <functional>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <map>}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classRecordBuffer}{RecordBuffer}}\ \{}
+\DoxyCodeLine{00013\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keyword}{static}\ std::string\ \mbox{\hyperlink{classRecordBuffer_a767148cdd8fc325b4f11a11d4d6d8b34}{pack}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structZipCodeRecord}{ZipCodeRecord}}\&\ record);}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{structZipCodeRecord}{ZipCodeRecord}}\ \mbox{\hyperlink{classRecordBuffer_a81edeb03a0c28c9ea894a820a42be0dc}{unpack}}(std::istream\&\ input);}
+\DoxyCodeLine{00018\ \};}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structBlock}{Block}}\ \{}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ \mbox{\hyperlink{structBlock_ab2d413d29e2931b6d65739605a2a1fda}{previous}}\ =\ -\/1;\ }
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ \mbox{\hyperlink{structBlock_a4c38a47c96b478d2f3a62c3a4feb9420}{next}}\ =\ -\/1;\ }
+\DoxyCodeLine{00024\ \ \ \ \ std::vector<ZipCodeRecord>\ \mbox{\hyperlink{structBlock_a2fd7205e4c554fd8d290708b2f64c94f}{records}};\ }
+\DoxyCodeLine{00025\ \};}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00028\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structBlockHeader}{BlockHeader}}\ \{}
+\DoxyCodeLine{00029\ \ \ \ \ std::size\_t\ \mbox{\hyperlink{structBlockHeader_ade4234a7c607b605d2dc9183e51f7307}{blockSize}}\ =\ 512;\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \mbox{\hyperlink{structBlockHeader_aed5e50222732282ce9e6217bda8a2b77}{minimum}}\ =\ 50;\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ \mbox{\hyperlink{structBlockHeader_ac347a497a63c6409753d395963ebda0c}{records}}\ =\ 0;\ }
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ \mbox{\hyperlink{structBlockHeader_a5b66c713becafab0863be2810b191436}{blocks}}\ =\ 0;\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ \mbox{\hyperlink{structBlockHeader_a0ac9606ebd7c31966ebb273cd75e70ec}{head}}\ =\ -\/1;\ }
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ \mbox{\hyperlink{structBlockHeader_aa8d9c169bc4c5651a35db2437c4fcdc3}{available}}\ =\ -\/1;\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structBlockHeader_a9d3de459d533cd3448c2787a6a3208ab}{stale}}\ =\ \textcolor{keyword}{false};\ }
+\DoxyCodeLine{00036\ \ \ \ \ std::string\ \mbox{\hyperlink{structBlockHeader_a5d1d2abea03c33590295139399e2fb8a}{indexName}};\ }
+\DoxyCodeLine{00037\ \};}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00040\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classBlockBuffer}{BlockBuffer}}\ \{}
+\DoxyCodeLine{00041\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::size\_t\ \mbox{\hyperlink{classBlockBuffer_a8403127570c085e1b122f62dc37c3740}{metadataSize}}\ =\ 64;\ }
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keyword}{static}\ std::size\_t\ \mbox{\hyperlink{classBlockBuffer_a30d0ac8e21c8ffd1b9d08554c6e8d6ce}{used}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structBlock}{Block}}\&\ block);}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{structBlock}{Block}}\ \mbox{\hyperlink{classBlockBuffer_a75d644556fa0acd5115b75da7b5f08c0}{read}}(std::istream\&\ file,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structBlockHeader}{BlockHeader}}\&\ header,\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ rbn);}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classBlockBuffer_a5dc70aa633160dd8214df1ace41508c3}{write}}(std::ostream\&\ file,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structBlockHeader}{BlockHeader}}\&\ header,\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ rbn,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structBlock}{Block}}\&\ block);}
+\DoxyCodeLine{00049\ \};}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00054\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classSequenceSet}{SequenceSet}}\ \{}
+\DoxyCodeLine{00055\ \ \ \ \ std::filesystem::path\ \mbox{\hyperlink{classSequenceSet_ae8d2d9323faa3de368cdf9625dd518cf}{path}};\ }
+\DoxyCodeLine{00056\ \ \ \ \ std::fstream\ \mbox{\hyperlink{classSequenceSet_a419eaf26ec6b084b510425e8fcb45312}{file}};\ }
+\DoxyCodeLine{00057\ \ \ \ \ \mbox{\hyperlink{structBlockHeader}{BlockHeader}}\ \mbox{\hyperlink{classSequenceSet_a75187eddb47fd898fef418f9291f2bd2}{header}};\ }
+\DoxyCodeLine{00058\ \ \ \ \ std::map<std::string,\ long\ long>\ \mbox{\hyperlink{classSequenceSet_a3d25a9ddd39e7f2cca16ecda2b975305}{index}};\ }
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classSequenceSet_a10650e97f4064ef82c33239868744fe9}{save}}();}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ \mbox{\hyperlink{classSequenceSet_abc727f9ed64c9a607dfe1a07ee1c2ec7}{allocate}}();}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classSequenceSet_a7290e31087be8cb3eaa6405ed7524686}{indexBlock}}(\textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ rbn,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structBlock}{Block}}\&\ block);}
+\DoxyCodeLine{00066\ \ \ \ \ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ \mbox{\hyperlink{classSequenceSet_aa6db59add2fbe78a432307442a0e87e0}{locate}}(\textcolor{keyword}{const}\ std::string\&\ zip)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00068\ \ \ \ \ std::size\_t\ \mbox{\hyperlink{classSequenceSet_af578d712b147331a4e61731aa1626724}{partition}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structBlock}{Block}}\&\ combined)\ \textcolor{keyword}{const};}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classSequenceSet_af81d62138cfbaf80cc8f88522a1fdabc}{rebalance}}(\textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ rbn,\ \mbox{\hyperlink{structBlock}{Block}}\ block);}
+\DoxyCodeLine{00071\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classSequenceSet}{SequenceSet}}(\textcolor{keyword}{const}\ std::filesystem::path\&\ filename);}
+\DoxyCodeLine{00075\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classSequenceSet_a7498d38e049be5808c1180075664954d}{build}}(\textcolor{keyword}{const}\ std::filesystem::path\&\ source,\ \textcolor{keyword}{const}\ std::filesystem::path\&\ destination,}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::size\_t\ blockSize\ =\ 512,\ \textcolor{keywordtype}{unsigned}\ minimum\ =\ 50);}
+\DoxyCodeLine{00078\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classSequenceSet_a347048abb48935a6a6a2b11012bf27c8}{find}}(\textcolor{keyword}{const}\ std::string\&\ zip,\ \mbox{\hyperlink{structZipCodeRecord}{ZipCodeRecord}}\&\ result);}
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classSequenceSet_af83e6cafc648ad97c5716cf1729b5bfe}{each}}(\textcolor{keyword}{const}\ std::function<\textcolor{keywordtype}{void}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structZipCodeRecord}{ZipCodeRecord}}\&)>\&\ visit);}
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classSequenceSet_a40834c09c9754c1d36bebe9e67cee420}{dump}}(\textcolor{keyword}{const}\ std::string\&\ order);}
+\DoxyCodeLine{00084\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classSequenceSet_a4b50c09cc1b077f2eb067a2a2d97ab59}{add}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{structZipCodeRecord}{ZipCodeRecord}}\&\ record);}
+\DoxyCodeLine{00086\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classSequenceSet_a98fdf1b6c109712fbe52ce57c7565ca5}{remove}}(\textcolor{keyword}{const}\ std::string\&\ zip);}
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classSequenceSet_a2b74abbad54e5c0be0de36787b811bbc}{validate}}();}
+\DoxyCodeLine{00090\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classSequenceSet_a4f857e214074b3c26646ed08d0f7af19}{finish}}();}
+\DoxyCodeLine{00092\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classSequenceSet_a74810bf4d9185f2962c0a7cff1861c7b}{update}}(\textcolor{keyword}{const}\ std::filesystem::path\&\ data,\ \textcolor{keyword}{const}\ std::filesystem::path\&\ input,\ \textcolor{keywordtype}{bool}\ additions);}
+\DoxyCodeLine{00093\ \};}
+\DoxyCodeLine{00094\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

@@ -1,0 +1,46 @@
+\doxysection{Block\+Header Struct Reference}
+\hypertarget{structBlockHeader}{}\label{structBlockHeader}\index{BlockHeader@{BlockHeader}}
+
+
+Metadata for a version 3 blocked sequence set.  
+
+
+
+
+{\ttfamily \#include $<$Sequence\+Set.\+h$>$}
+
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structBlockHeader_ade4234a7c607b605d2dc9183e51f7307}\label{structBlockHeader_ade4234a7c607b605d2dc9183e51f7307} 
+std\+::size\+\_\+t {\bfseries block\+Size} = 512
+\begin{DoxyCompactList}\small\item\em Total bytes per block. \end{DoxyCompactList}\item 
+\Hypertarget{structBlockHeader_aed5e50222732282ce9e6217bda8a2b77}\label{structBlockHeader_aed5e50222732282ce9e6217bda8a2b77} 
+unsigned {\bfseries minimum} = 50
+\begin{DoxyCompactList}\small\item\em Minimum payload occupancy percentage. \end{DoxyCompactList}\item 
+\Hypertarget{structBlockHeader_ac347a497a63c6409753d395963ebda0c}\label{structBlockHeader_ac347a497a63c6409753d395963ebda0c} 
+unsigned long long {\bfseries records} = 0
+\begin{DoxyCompactList}\small\item\em Live records. \end{DoxyCompactList}\item 
+\Hypertarget{structBlockHeader_a5b66c713becafab0863be2810b191436}\label{structBlockHeader_a5b66c713becafab0863be2810b191436} 
+long long {\bfseries blocks} = 0
+\begin{DoxyCompactList}\small\item\em Physical blocks including available blocks. \end{DoxyCompactList}\item 
+\Hypertarget{structBlockHeader_a0ac9606ebd7c31966ebb273cd75e70ec}\label{structBlockHeader_a0ac9606ebd7c31966ebb273cd75e70ec} 
+long long {\bfseries head} = -\/1
+\begin{DoxyCompactList}\small\item\em First active block. \end{DoxyCompactList}\item 
+\Hypertarget{structBlockHeader_aa8d9c169bc4c5651a35db2437c4fcdc3}\label{structBlockHeader_aa8d9c169bc4c5651a35db2437c4fcdc3} 
+long long {\bfseries available} = -\/1
+\begin{DoxyCompactList}\small\item\em First available block. \end{DoxyCompactList}\item 
+\Hypertarget{structBlockHeader_a9d3de459d533cd3448c2787a6a3208ab}\label{structBlockHeader_a9d3de459d533cd3448c2787a6a3208ab} 
+bool {\bfseries stale} = false
+\begin{DoxyCompactList}\small\item\em True while an update is incomplete. \end{DoxyCompactList}\item 
+\Hypertarget{structBlockHeader_a5d1d2abea03c33590295139399e2fb8a}\label{structBlockHeader_a5d1d2abea03c33590295139399e2fb8a} 
+std\+::string {\bfseries index\+Name}
+\begin{DoxyCompactList}\small\item\em Companion filename in the data directory. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Metadata for a version 3 blocked sequence set. 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{SequenceSet_8h}{Sequence\+Set.\+h}}\end{DoxyCompactItemize}

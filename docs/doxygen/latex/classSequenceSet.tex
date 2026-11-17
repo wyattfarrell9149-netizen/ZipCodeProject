@@ -1,0 +1,92 @@
+\doxysection{Sequence\+Set Class Reference}
+\hypertarget{classSequenceSet}{}\label{classSequenceSet}\index{SequenceSet@{SequenceSet}}
+
+
+Search and modify a disk sequence set while keeping only its index in RAM. Updates use a temporary copy and commit after validation. Run one writer at a time.  
+
+
+
+
+{\ttfamily \#include $<$Sequence\+Set.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classSequenceSet_a7da634015edac5bb41e67d9ab5e329bc}\label{classSequenceSet_a7da634015edac5bb41e67d9ab5e329bc} 
+{\bfseries Sequence\+Set} (const std\+::filesystem\+::path \&filename)
+\begin{DoxyCompactList}\small\item\em Open an existing file and load its saved simple index. \end{DoxyCompactList}\item 
+\Hypertarget{classSequenceSet_a347048abb48935a6a6a2b11012bf27c8}\label{classSequenceSet_a347048abb48935a6a6a2b11012bf27c8} 
+bool {\bfseries find} (const std\+::string \&zip, \mbox{\hyperlink{structZipCodeRecord}{Zip\+Code\+Record}} \&result)
+\begin{DoxyCompactList}\small\item\em Search one indexed block and return whether the key was found. \end{DoxyCompactList}\item 
+\Hypertarget{classSequenceSet_af83e6cafc648ad97c5716cf1729b5bfe}\label{classSequenceSet_af83e6cafc648ad97c5716cf1729b5bfe} 
+void {\bfseries each} (const std\+::function$<$ void(const \mbox{\hyperlink{structZipCodeRecord}{Zip\+Code\+Record}} \&)$>$ \&visit)
+\begin{DoxyCompactList}\small\item\em Visit active records in logical order, one block at a time. \end{DoxyCompactList}\item 
+\Hypertarget{classSequenceSet_a40834c09c9754c1d36bebe9e67cee420}\label{classSequenceSet_a40834c09c9754c1d36bebe9e67cee420} 
+void {\bfseries dump} (const std\+::string \&order)
+\begin{DoxyCompactList}\small\item\em Print physical blocks, logical blocks, or the primary index. \end{DoxyCompactList}\item 
+\Hypertarget{classSequenceSet_a4b50c09cc1b077f2eb067a2a2d97ab59}\label{classSequenceSet_a4b50c09cc1b077f2eb067a2a2d97ab59} 
+void {\bfseries add} (const \mbox{\hyperlink{structZipCodeRecord}{Zip\+Code\+Record}} \&record)
+\begin{DoxyCompactList}\small\item\em Insert a unique record, splitting and reusing available blocks as needed. \end{DoxyCompactList}\item 
+\Hypertarget{classSequenceSet_a98fdf1b6c109712fbe52ce57c7565ca5}\label{classSequenceSet_a98fdf1b6c109712fbe52ce57c7565ca5} 
+void {\bfseries remove} (const std\+::string \&zip)
+\begin{DoxyCompactList}\small\item\em Delete a key, redistributing or merging as needed. \end{DoxyCompactList}\item 
+\Hypertarget{classSequenceSet_a2b74abbad54e5c0be0de36787b811bbc}\label{classSequenceSet_a2b74abbad54e5c0be0de36787b811bbc} 
+void {\bfseries validate} ()
+\begin{DoxyCompactList}\small\item\em Validate lists, index entries, counts, and occupancy against the disk. \end{DoxyCompactList}\item 
+\Hypertarget{classSequenceSet_a4f857e214074b3c26646ed08d0f7af19}\label{classSequenceSet_a4f857e214074b3c26646ed08d0f7af19} 
+void {\bfseries finish} ()
+\begin{DoxyCompactList}\small\item\em Flush completed modifications and clear the stale flag. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classSequenceSet_a7498d38e049be5808c1180075664954d}\label{classSequenceSet_a7498d38e049be5808c1180075664954d} 
+static void {\bfseries build} (const std\+::filesystem\+::path \&source, const std\+::filesystem\+::path \&destination, std\+::size\+\_\+t block\+Size=512, unsigned minimum=50)
+\begin{DoxyCompactList}\small\item\em Generate a sequence set from a Project 2 data file. \end{DoxyCompactList}\item 
+\Hypertarget{classSequenceSet_a74810bf4d9185f2962c0a7cff1861c7b}\label{classSequenceSet_a74810bf4d9185f2962c0a7cff1861c7b} 
+static void {\bfseries update} (const std\+::filesystem\+::path \&data, const std\+::filesystem\+::path \&input, bool additions)
+\begin{DoxyCompactList}\small\item\em Apply a file of additions or deletions to a temporary copy and commit it. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classSequenceSet_a10650e97f4064ef82c33239868744fe9}\label{classSequenceSet_a10650e97f4064ef82c33239868744fe9} 
+void {\bfseries save} ()
+\begin{DoxyCompactList}\small\item\em Persist the current metadata and index. \end{DoxyCompactList}\item 
+\Hypertarget{classSequenceSet_abc727f9ed64c9a607dfe1a07ee1c2ec7}\label{classSequenceSet_abc727f9ed64c9a607dfe1a07ee1c2ec7} 
+long long {\bfseries allocate} ()
+\begin{DoxyCompactList}\small\item\em Get an available block or append a new one. \end{DoxyCompactList}\item 
+\Hypertarget{classSequenceSet_a7290e31087be8cb3eaa6405ed7524686}\label{classSequenceSet_a7290e31087be8cb3eaa6405ed7524686} 
+void {\bfseries index\+Block} (long long rbn, const \mbox{\hyperlink{structBlock}{Block}} \&block)
+\begin{DoxyCompactList}\small\item\em Replace the index entry for one active block. \end{DoxyCompactList}\item 
+\Hypertarget{classSequenceSet_aa6db59add2fbe78a432307442a0e87e0}\label{classSequenceSet_aa6db59add2fbe78a432307442a0e87e0} 
+long long {\bfseries locate} (const std\+::string \&zip) const
+\begin{DoxyCompactList}\small\item\em Choose the block which could contain a key. \end{DoxyCompactList}\item 
+\Hypertarget{classSequenceSet_af578d712b147331a4e61731aa1626724}\label{classSequenceSet_af578d712b147331a4e61731aa1626724} 
+std\+::size\+\_\+t {\bfseries partition} (const \mbox{\hyperlink{structBlock}{Block}} \&combined) const
+\begin{DoxyCompactList}\small\item\em Split records at a boundary that satisfies both minimum occupancies. \end{DoxyCompactList}\item 
+\Hypertarget{classSequenceSet_af81d62138cfbaf80cc8f88522a1fdabc}\label{classSequenceSet_af81d62138cfbaf80cc8f88522a1fdabc} 
+void {\bfseries rebalance} (long long rbn, \mbox{\hyperlink{structBlock}{Block}} block)
+\begin{DoxyCompactList}\small\item\em Redistribute or merge an underfull block with a neighbor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classSequenceSet_ae8d2d9323faa3de368cdf9625dd518cf}\label{classSequenceSet_ae8d2d9323faa3de368cdf9625dd518cf} 
+std\+::filesystem\+::path {\bfseries path}
+\begin{DoxyCompactList}\small\item\em Data filename. \end{DoxyCompactList}\item 
+\Hypertarget{classSequenceSet_a419eaf26ec6b084b510425e8fcb45312}\label{classSequenceSet_a419eaf26ec6b084b510425e8fcb45312} 
+std\+::fstream {\bfseries file}
+\begin{DoxyCompactList}\small\item\em Binary data stream. \end{DoxyCompactList}\item 
+\Hypertarget{classSequenceSet_a75187eddb47fd898fef418f9291f2bd2}\label{classSequenceSet_a75187eddb47fd898fef418f9291f2bd2} 
+\mbox{\hyperlink{structBlockHeader}{Block\+Header}} {\bfseries header}
+\begin{DoxyCompactList}\small\item\em Header metadata. \end{DoxyCompactList}\item 
+\Hypertarget{classSequenceSet_a3d25a9ddd39e7f2cca16ecda2b975305}\label{classSequenceSet_a3d25a9ddd39e7f2cca16ecda2b975305} 
+std\+::map$<$ std\+::string, long long $>$ {\bfseries index}
+\begin{DoxyCompactList}\small\item\em Highest ZIP to RBN. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Search and modify a disk sequence set while keeping only its index in RAM. Updates use a temporary copy and commit after validation. Run one writer at a time. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{SequenceSet_8h}{Sequence\+Set.\+h}}\item 
+\mbox{\hyperlink{SequenceSet_8cpp}{Sequence\+Set.\+cpp}}\end{DoxyCompactItemize}

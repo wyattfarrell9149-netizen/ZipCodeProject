@@ -1,0 +1,77 @@
+\doxysection{State Struct Reference}
+\hypertarget{structState}{}\label{structState}\index{State@{State}}
+
+
+Stores the current extreme records for a state. Longitude follows the assignment literally\+: east = minimum, west = maximum. Coordinate ties select the smallest ZIP so input order cannot change output.  
+
+
+
+
+{\ttfamily \#include $<$State.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structState_a1a74f875406bdf75dd3376ddd549becc}{State}} (const \mbox{\hyperlink{structZipCodeRecord}{Zip\+Code\+Record}} \&record)
+\begin{DoxyCompactList}\small\item\em Initialize all candidates using the state\textquotesingle{}s first record. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{structState_ae37d8325c7d4449d5f29dee96a5c40e3}{update}} (const \mbox{\hyperlink{structZipCodeRecord}{Zip\+Code\+Record}} \&record)
+\begin{DoxyCompactList}\small\item\em Compare a record with all four current extremes. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{structState_a4bd89a82d97f110f14c88796efe0da57}\label{structState_a4bd89a82d97f110f14c88796efe0da57} 
+\mbox{\hyperlink{structZipCodeRecord}{Zip\+Code\+Record}} {\bfseries east}
+\item 
+\Hypertarget{structState_a26180d060cebd5ba6923d54161d7093b}\label{structState_a26180d060cebd5ba6923d54161d7093b} 
+\mbox{\hyperlink{structZipCodeRecord}{Zip\+Code\+Record}} {\bfseries west}
+\item 
+\Hypertarget{structState_abb8d37030138dae84c9a0429377e9258}\label{structState_abb8d37030138dae84c9a0429377e9258} 
+\mbox{\hyperlink{structZipCodeRecord}{Zip\+Code\+Record}} {\bfseries north}
+\item 
+\Hypertarget{structState_a6f786d0068ef647a27adf1bdef30f390}\label{structState_a6f786d0068ef647a27adf1bdef30f390} 
+\mbox{\hyperlink{structZipCodeRecord}{Zip\+Code\+Record}} {\bfseries south}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Stores the current extreme records for a state. Longitude follows the assignment literally\+: east = minimum, west = maximum. Coordinate ties select the smallest ZIP so input order cannot change output. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{structState_a1a74f875406bdf75dd3376ddd549becc}\label{structState_a1a74f875406bdf75dd3376ddd549becc} 
+\index{State@{State}!State@{State}}
+\index{State@{State}!State@{State}}
+\doxysubsubsection{\texorpdfstring{State()}{State()}}
+{\footnotesize\ttfamily State\+::\+State (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structZipCodeRecord}{Zip\+Code\+Record}} \&}]{record }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}
+
+
+
+Initialize all candidates using the state\textquotesingle{}s first record. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em record} & Initial ZIP record. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{structState_ae37d8325c7d4449d5f29dee96a5c40e3}\label{structState_ae37d8325c7d4449d5f29dee96a5c40e3} 
+\index{State@{State}!update@{update}}
+\index{update@{update}!State@{State}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}}
+{\footnotesize\ttfamily void State\+::update (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structZipCodeRecord}{Zip\+Code\+Record}} \&}]{record }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Compare a record with all four current extremes. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em record} & New ZIP record for this state. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{State_8h}{State.\+h}}\end{DoxyCompactItemize}

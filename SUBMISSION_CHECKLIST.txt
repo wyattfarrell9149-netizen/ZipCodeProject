@@ -1,0 +1,42 @@
+Project 3 submission checklist
+
+Already covered
+- Preliminary design document: ZipCode3_Preliminary_Design.docx was prepared.
+- Preliminary test document: ZipCode3_Preliminary_Test.docx was prepared.
+  Their actual submission dates must be checked by you. The assignment requires
+  submission before coding and at least one week before final submission.
+- C++ source and Doxygen comments: included in this package.
+- Doxyfile: updated for the Project 3 classes.
+- Original CSV and synthetic test CSV/key files: included.
+- Project 2 length-indicated input: project2_data.txt is included.
+- Project 3 blocked data and simple index: blocks.txt and blocks.txt_index.txt
+  are included, as well as the small test file and index in tests.
+- Recording instructions: TYPE_SCRIPT_STEPS.txt contains every command.
+
+You have said you will do
+- Record the typescripts on your own system, using the provided instructions.
+- Generate the Doxygen PDF.
+
+Still to prepare or finalize
+- Project 3 user guide in .txt format.
+- Final design document describing the implementation.
+- Final test document with your recorded test results and required small cases.
+- Updated AI use statement and your own reflection, if required by your course.
+  The earlier statement was for Project 2 and needs to reflect this work.
+
+Final files required by the Project 3 page
+- User guide (.txt)
+- Length-indicated blocked data files (.txt)
+- Simple index file (.txt)
+- Doxygen PDF
+- .cpp and .h source files
+- Typescript recording(s) demonstrating the programs
+- Final design document
+- Final test document and small data used for additions and deletions
+
+Include the CSV and key input files needed to reproduce the demonstrations.
+The linked Project 3 page does not explicitly list an AI statement, but your
+earlier course submission checklist did. Confirm your course's current rule.
+
+The two preliminary documents are earlier submissions, separate from the final
+package. Source files should be zipped as the assignment requests.

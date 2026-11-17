@@ -1,0 +1,24 @@
+\doxysection{Buffer.\+h File Reference}
+\hypertarget{Buffer_8h}{}\label{Buffer_8h}\index{Buffer.h@{Buffer.h}}
+
+
+Sequential CSV input buffer and ZIP code record definition.  
+
+
+{\ttfamily \#include "{}Header\+Buffer.\+h"{}}\newline
+{\ttfamily \#include $<$array$>$}\newline
+{\ttfamily \#include $<$fstream$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structZipCodeRecord}{Zip\+Code\+Record}}
+\begin{DoxyCompactList}\small\item\em One ZIP code record gathered from a CSV row. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classBuffer}{Buffer}}
+\begin{DoxyCompactList}\small\item\em Reads CSV records sequentially, keeping only the current row. Supports quoted fields, escaped quotes, CRLF, and multiline quoted headers. CSV columns are identified by name. Indexed data uses the order in its header. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Sequential CSV input buffer and ZIP code record definition. 
+

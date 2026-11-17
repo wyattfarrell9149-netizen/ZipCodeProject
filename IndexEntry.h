@@ -1,16 +1,14 @@
-/**
- * @file IndexEntry.h
- * @brief This file will the store the information of zipcode/s and an offset which will give us the location of that zipcode within the file
+/** @file IndexEntry.h
+ * @brief Key and byte position for one ZIP code in the data file.
  */
 #ifndef INDEXENTRY_H
 #define INDEXENTRY_H
+#include <ios>
 #include <string>
 
+/** @brief One primary key index entry. */
 struct IndexEntry {
-
-    std::string zip;
-    long offset; /*for position of zipcode starting from the file */
-
-
+    std::string zip; ///< Five-digit ZIP code.
+    std::streamoff offset; ///< Byte position of the record's length prefix.
 };
 #endif

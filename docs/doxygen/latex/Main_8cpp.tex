@@ -1,0 +1,146 @@
+\doxysection{Main.\+cpp File Reference}
+\hypertarget{Main_8cpp}{}\label{Main_8cpp}\index{Main.cpp@{Main.cpp}}
+
+
+Build ZIP data and index files, look up ZIP codes, or print state extremes.  
+
+
+{\ttfamily \#include "{}Buffer.\+h"{}}\newline
+{\ttfamily \#include "{}Index\+Entry.\+h"{}}\newline
+{\ttfamily \#include "{}State.\+h"{}}\newline
+{\ttfamily \#include "{}Sequence\+Set.\+h"{}}\newline
+{\ttfamily \#include $<$algorithm$>$}\newline
+{\ttfamily \#include $<$charconv$>$}\newline
+{\ttfamily \#include $<$filesystem$>$}\newline
+{\ttfamily \#include $<$iomanip$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$map$>$}\newline
+{\ttfamily \#include $<$stdexcept$>$}\newline
+{\ttfamily \#include $<$string\+\_\+view$>$}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{Main_8cpp_aec076116d92f3918aecfd59febf4d0ab}\label{Main_8cpp_aec076116d92f3918aecfd59febf4d0ab} 
+static bool {\bfseries is\+Zip} (std\+::string\+\_\+view zip)
+\begin{DoxyCompactList}\small\item\em Check whether a key is exactly five ASCII digits. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{Main_8cpp_a14f315055f262db4f9c4de9c5e14bc93}{build\+Index}} (const std\+::string \&csv\+Path, const fs\+::path \&data\+Path)
+\begin{DoxyCompactList}\small\item\em Stream records into the indexed data file and write the sorted primary index. \end{DoxyCompactList}\item 
+static std\+::vector$<$ \mbox{\hyperlink{structIndexEntry}{Index\+Entry}} $>$ \mbox{\hyperlink{Main_8cpp_a63d12cd5798674d31085b8c4b183115c}{load\+Index}} (const fs\+::path \&data\+Path, const \mbox{\hyperlink{structDataHeader}{Data\+Header}} \&header)
+\begin{DoxyCompactList}\small\item\em Load sorted ZIP keys and offsets from the companion file. \end{DoxyCompactList}\item 
+\Hypertarget{Main_8cpp_a86cfaba38e8d127b5b7b39a6423ead93}\label{Main_8cpp_a86cfaba38e8d127b5b7b39a6423ead93} 
+static std\+::string {\bfseries display\+Text} (const std\+::string \&text)
+\begin{DoxyCompactList}\small\item\em Quote text and show embedded line breaks without splitting a record. \end{DoxyCompactList}\item 
+\Hypertarget{Main_8cpp_a72291a7c1da8ba906dda53caa640df13}\label{Main_8cpp_a72291a7c1da8ba906dda53caa640df13} 
+static std\+::string {\bfseries display\+Coordinate} (double value)
+\begin{DoxyCompactList}\small\item\em Format a coordinate with the shortest decimal that round-\/trips to its value. \end{DoxyCompactList}\item 
+static int \mbox{\hyperlink{Main_8cpp_a5785400a70b8ebdf0e00b10ff857f691}{search\+Zip\+Codes}} (const fs\+::path \&data\+Path, char \texorpdfstring{$\ast$}{*}const \texorpdfstring{$\ast$}{*}first, char \texorpdfstring{$\ast$}{*}const \texorpdfstring{$\ast$}{*}last)
+\begin{DoxyCompactList}\small\item\em Load the index, then seek to and print one record per matching -\/Z option. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{Main_8cpp_a4d4948845d25c42a29f6b08788866f97}{print\+Extremes}} (\mbox{\hyperlink{classBuffer}{Buffer}} \&buffer)
+\begin{DoxyCompactList}\small\item\em Run the original directional-\/extremes calculation using either input format. \end{DoxyCompactList}\item 
+\Hypertarget{Main_8cpp_a4a61bb8c57f67857ca1d925353fd2ebb}\label{Main_8cpp_a4a61bb8c57f67857ca1d925353fd2ebb} 
+static void {\bfseries blocked\+Extremes} (\mbox{\hyperlink{classSequenceSet}{Sequence\+Set}} \&data)
+\begin{DoxyCompactList}\small\item\em Run the original extremes calculation on active sequence set records. \end{DoxyCompactList}\item 
+\Hypertarget{Main_8cpp_a12ed625033d143513435f459a9b3ab74}\label{Main_8cpp_a12ed625033d143513435f459a9b3ab74} 
+static unsigned long long {\bfseries setting} (const std\+::string \&text)
+\begin{DoxyCompactList}\small\item\em Parse a nonnegative decimal command-\/line setting without trailing characters. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{Main_8cpp_a0ddf1224851353fc92bfbff6f499fa97}{main}} (int argc, char \texorpdfstring{$\ast$}{*}argv\mbox{[}$\,$\mbox{]})
+\begin{DoxyCompactList}\small\item\em Run the ZIP code application. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Build ZIP data and index files, look up ZIP codes, or print state extremes. 
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{Main_8cpp_a14f315055f262db4f9c4de9c5e14bc93}\label{Main_8cpp_a14f315055f262db4f9c4de9c5e14bc93} 
+\index{Main.cpp@{Main.cpp}!buildIndex@{buildIndex}}
+\index{buildIndex@{buildIndex}!Main.cpp@{Main.cpp}}
+\doxysubsubsection{\texorpdfstring{buildIndex()}{buildIndex()}}
+{\footnotesize\ttfamily static void build\+Index (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{csv\+Path,  }\item[{const fs\+::path \&}]{data\+Path }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Stream records into the indexed data file and write the sorted primary index. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em csv\+Path} & Source CSV, in any supported column order. \\
+\hline
+{\em data\+Path} & Destination .txt or .zdat file. Text data uses a companion \+\_\+index.\+txt file. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{Main_8cpp_a63d12cd5798674d31085b8c4b183115c}\label{Main_8cpp_a63d12cd5798674d31085b8c4b183115c} 
+\index{Main.cpp@{Main.cpp}!loadIndex@{loadIndex}}
+\index{loadIndex@{loadIndex}!Main.cpp@{Main.cpp}}
+\doxysubsubsection{\texorpdfstring{loadIndex()}{loadIndex()}}
+{\footnotesize\ttfamily static std\+::vector$<$ \mbox{\hyperlink{structIndexEntry}{Index\+Entry}} $>$ load\+Index (\begin{DoxyParamCaption}\item[{const fs\+::path \&}]{data\+Path,  }\item[{const \mbox{\hyperlink{structDataHeader}{Data\+Header}} \&}]{header }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Load sorted ZIP keys and offsets from the companion file. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+Path} & Path to the indexed data file. \\
+\hline
+{\em header} & Data header with the index filename, record count, and minimum offset. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Sorted primary index for binary search. 
+\end{DoxyReturn}
+\Hypertarget{Main_8cpp_a0ddf1224851353fc92bfbff6f499fa97}\label{Main_8cpp_a0ddf1224851353fc92bfbff6f499fa97} 
+\index{Main.cpp@{Main.cpp}!main@{main}}
+\index{main@{main}!Main.cpp@{Main.cpp}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char \texorpdfstring{$\ast$}{*}}]{argv\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+Run the ZIP code application. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em argc} & Argument count. \\
+\hline
+{\em argv} & Program name and build, search, or extremes arguments. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Zero on success, one for data errors, two for incorrect usage. 
+\end{DoxyReturn}
+\Hypertarget{Main_8cpp_a4d4948845d25c42a29f6b08788866f97}\label{Main_8cpp_a4d4948845d25c42a29f6b08788866f97} 
+\index{Main.cpp@{Main.cpp}!printExtremes@{printExtremes}}
+\index{printExtremes@{printExtremes}!Main.cpp@{Main.cpp}}
+\doxysubsubsection{\texorpdfstring{printExtremes()}{printExtremes()}}
+{\footnotesize\ttfamily static void print\+Extremes (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classBuffer}{Buffer}} \&}]{buffer }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Run the original directional-\/extremes calculation using either input format. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em buffer} & Open CSV or indexed data buffer. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{Main_8cpp_a5785400a70b8ebdf0e00b10ff857f691}\label{Main_8cpp_a5785400a70b8ebdf0e00b10ff857f691} 
+\index{Main.cpp@{Main.cpp}!searchZipCodes@{searchZipCodes}}
+\index{searchZipCodes@{searchZipCodes}!Main.cpp@{Main.cpp}}
+\doxysubsubsection{\texorpdfstring{searchZipCodes()}{searchZipCodes()}}
+{\footnotesize\ttfamily static int search\+Zip\+Codes (\begin{DoxyParamCaption}\item[{const fs\+::path \&}]{data\+Path,  }\item[{char \texorpdfstring{$\ast$}{*}const \texorpdfstring{$\ast$}{*}}]{first,  }\item[{char \texorpdfstring{$\ast$}{*}const \texorpdfstring{$\ast$}{*}}]{last }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Load the index, then seek to and print one record per matching -\/Z option. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+Path} & Path to the length-\/indicated data file. \\
+\hline
+{\em first} & Beginning of the command-\/line search options. \\
+\hline
+{\em last} & One past the final option. \\
+\hline
+\end{DoxyParams}

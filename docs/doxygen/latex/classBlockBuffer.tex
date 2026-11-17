@@ -1,0 +1,38 @@
+\doxysection{Block\+Buffer Class Reference}
+\hypertarget{classBlockBuffer}{}\label{classBlockBuffer}\index{BlockBuffer@{BlockBuffer}}
+
+
+Read and write complete fixed-\/size blocks.  
+
+
+
+
+{\ttfamily \#include $<$Sequence\+Set.\+h$>$}
+
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classBlockBuffer_a30d0ac8e21c8ffd1b9d08554c6e8d6ce}\label{classBlockBuffer_a30d0ac8e21c8ffd1b9d08554c6e8d6ce} 
+static std\+::size\+\_\+t {\bfseries used} (const \mbox{\hyperlink{structBlock}{Block}} \&block)
+\begin{DoxyCompactList}\small\item\em Return the total serialized record bytes in a block. \end{DoxyCompactList}\item 
+\Hypertarget{classBlockBuffer_a75d644556fa0acd5115b75da7b5f08c0}\label{classBlockBuffer_a75d644556fa0acd5115b75da7b5f08c0} 
+static \mbox{\hyperlink{structBlock}{Block}} {\bfseries read} (std\+::istream \&file, const \mbox{\hyperlink{structBlockHeader}{Block\+Header}} \&header, long long rbn)
+\begin{DoxyCompactList}\small\item\em Read a block and validate its ordered records. \end{DoxyCompactList}\item 
+\Hypertarget{classBlockBuffer_a5dc70aa633160dd8214df1ace41508c3}\label{classBlockBuffer_a5dc70aa633160dd8214df1ace41508c3} 
+static void {\bfseries write} (std\+::ostream \&file, const \mbox{\hyperlink{structBlockHeader}{Block\+Header}} \&header, long long rbn, const \mbox{\hyperlink{structBlock}{Block}} \&block)
+\begin{DoxyCompactList}\small\item\em Write metadata, records, and blank padding to one block. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classBlockBuffer_a8403127570c085e1b122f62dc37c3740}\label{classBlockBuffer_a8403127570c085e1b122f62dc37c3740} 
+static constexpr std\+::size\+\_\+t {\bfseries metadata\+Size} = 64
+\begin{DoxyCompactList}\small\item\em Reserved ASCII block metadata. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Read and write complete fixed-\/size blocks. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{SequenceSet_8h}{Sequence\+Set.\+h}}\item 
+\mbox{\hyperlink{SequenceSet_8cpp}{Sequence\+Set.\+cpp}}\end{DoxyCompactItemize}

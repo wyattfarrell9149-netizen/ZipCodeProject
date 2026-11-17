@@ -1,0 +1,197 @@
+\doxysection{Buffer Class Reference}
+\hypertarget{classBuffer}{}\label{classBuffer}\index{Buffer@{Buffer}}
+
+
+Reads CSV records sequentially, keeping only the current row. Supports quoted fields, escaped quotes, CRLF, and multiline quoted headers. CSV columns are identified by name. Indexed data uses the order in its header.  
+
+
+
+
+{\ttfamily \#include $<$Buffer.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classBuffer_a009a1c2abdfde0d45cbefd4729cb95d9}{Buffer}} (const std\+::string \&filename)
+\begin{DoxyCompactList}\small\item\em Open input and consume one logical header record. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classBuffer_a91fdfe21d1eec3643df5c69bdc7ebbb6}{Buffer}} (const std\+::string \&filename, \mbox{\hyperlink{structDataHeader}{Data\+Header}} \&header)
+\begin{DoxyCompactList}\small\item\em Open a length-\/indicated file and read its header. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classBuffer_abf2a3adbe53fe807e40e71009afd0e18}{read\+At}} (std\+::streamoff offset, \mbox{\hyperlink{structZipCodeRecord}{Zip\+Code\+Record}} \&record)
+\begin{DoxyCompactList}\small\item\em Seek to an indexed record and unpack it. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classBuffer_a6bd108ae36775bac2282245a20aacd28}{next}} (\mbox{\hyperlink{structZipCodeRecord}{Zip\+Code\+Record}} \&record)
+\begin{DoxyCompactList}\small\item\em Gather the next ZIP record from the sequential stream. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classBuffer_a285bf13ca999eccc7b0a55b8c09ff008}\label{classBuffer_a285bf13ca999eccc7b0a55b8c09ff008} 
+static \mbox{\hyperlink{structZipCodeRecord}{Zip\+Code\+Record}} {\bfseries unpack} (const std\+::string \&payload)
+\begin{DoxyCompactList}\small\item\em Parse one canonical CSV payload using the existing field validation. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{classBuffer_a594a94fa8c3073fbd357a8aa143255d7}{write\+Record}} (std\+::ostream \&output, const \mbox{\hyperlink{structZipCodeRecord}{Zip\+Code\+Record}} \&record)
+\begin{DoxyCompactList}\small\item\em Write one length-\/indicated ZIP record. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structZipCodeRecord}{Zip\+Code\+Record}} \mbox{\hyperlink{classBuffer_a3dff9c74fc70214eed61605335cfbda5}{unpack\+Fields}} (const std\+::vector$<$ std\+::string $>$ \&fields)
+\begin{DoxyCompactList}\small\item\em Validate a parsed row using the current column mapping. \end{DoxyCompactList}\item 
+\Hypertarget{classBuffer_a92fd371409790ee64d2ca9bdaec2dd1a}\label{classBuffer_a92fd371409790ee64d2ca9bdaec2dd1a} 
+{\bfseries Buffer} ()=default
+\begin{DoxyCompactList}\small\item\em Internal parser instance for block records. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classBuffer_ad51a73d171857354734784a6d518e3a5}{read\+Fields}} (std\+::istream \&source, std\+::vector$<$ std\+::string $>$ \&fields)
+\begin{DoxyCompactList}\small\item\em Read one logical CSV record. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classBuffer_a6abeb49d8e4ec8f271f44b8b5a30cc0b}\label{classBuffer_a6abeb49d8e4ec8f271f44b8b5a30cc0b} 
+std\+::ifstream {\bfseries input}
+\begin{DoxyCompactList}\small\item\em Source stream. \end{DoxyCompactList}\item 
+\Hypertarget{classBuffer_a4437d1f4e3e06644785bdd47aa2f409c}\label{classBuffer_a4437d1f4e3e06644785bdd47aa2f409c} 
+std\+::size\+\_\+t {\bfseries record\+Number} = 0
+\begin{DoxyCompactList}\small\item\em Logical CSV record number, including header. \end{DoxyCompactList}\item 
+\Hypertarget{classBuffer_a55f6e81bddbdf500c684c0eeb3491c4f}\label{classBuffer_a55f6e81bddbdf500c684c0eeb3491c4f} 
+std\+::array$<$ std\+::size\+\_\+t, 6 $>$ {\bfseries columns} \{\}
+\begin{DoxyCompactList}\small\item\em Source position of each canonical field. \end{DoxyCompactList}\item 
+\Hypertarget{classBuffer_ad039716ccd54b447f3cd6c214a2e14f4}\label{classBuffer_ad039716ccd54b447f3cd6c214a2e14f4} 
+std\+::streampos {\bfseries data\+End} \{\}
+\begin{DoxyCompactList}\small\item\em End of the indexed data stream for length validation. \end{DoxyCompactList}\item 
+\Hypertarget{classBuffer_a33a3f614933f00793ffc9700b50536c2}\label{classBuffer_a33a3f614933f00793ffc9700b50536c2} 
+bool {\bfseries length\+Indicated} = false
+\begin{DoxyCompactList}\small\item\em Whether records start with an ASCII byte count. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Reads CSV records sequentially, keeping only the current row. Supports quoted fields, escaped quotes, CRLF, and multiline quoted headers. CSV columns are identified by name. Indexed data uses the order in its header. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classBuffer_a009a1c2abdfde0d45cbefd4729cb95d9}\label{classBuffer_a009a1c2abdfde0d45cbefd4729cb95d9} 
+\index{Buffer@{Buffer}!Buffer@{Buffer}}
+\index{Buffer@{Buffer}!Buffer@{Buffer}}
+\doxysubsubsection{\texorpdfstring{Buffer()}{Buffer()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Buffer\+::\+Buffer (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{filename }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+Open input and consume one logical header record. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em filename} & CSV path. \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::runtime\+\_\+error} & If input or header is invalid. \\
+\hline
+\end{DoxyExceptions}
+Map each field name to its column so reordering a CSV does not change results.\Hypertarget{classBuffer_a91fdfe21d1eec3643df5c69bdc7ebbb6}\label{classBuffer_a91fdfe21d1eec3643df5c69bdc7ebbb6} 
+\index{Buffer@{Buffer}!Buffer@{Buffer}}
+\index{Buffer@{Buffer}!Buffer@{Buffer}}
+\doxysubsubsection{\texorpdfstring{Buffer()}{Buffer()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Buffer\+::\+Buffer (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{filename,  }\item[{\mbox{\hyperlink{structDataHeader}{Data\+Header}} \&}]{header }\end{DoxyParamCaption})}
+
+
+
+Open a length-\/indicated file and read its header. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em filename} & Length-\/indicated file path. \\
+\hline
+{\em header} & Destination for header metadata. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classBuffer_a6bd108ae36775bac2282245a20aacd28}\label{classBuffer_a6bd108ae36775bac2282245a20aacd28} 
+\index{Buffer@{Buffer}!next@{next}}
+\index{next@{next}!Buffer@{Buffer}}
+\doxysubsubsection{\texorpdfstring{next()}{next()}}
+{\footnotesize\ttfamily bool Buffer\+::next (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structZipCodeRecord}{Zip\+Code\+Record}} \&}]{record }\end{DoxyParamCaption})}
+
+
+
+Gather the next ZIP record from the sequential stream. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em record} & Destination ZIP record. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+False at end of file, otherwise true. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::runtime\+\_\+error} & For malformed rows or coordinates. \\
+\hline
+\end{DoxyExceptions}
+Reject a payload length that extends beyond the data file.\Hypertarget{classBuffer_abf2a3adbe53fe807e40e71009afd0e18}\label{classBuffer_abf2a3adbe53fe807e40e71009afd0e18} 
+\index{Buffer@{Buffer}!readAt@{readAt}}
+\index{readAt@{readAt}!Buffer@{Buffer}}
+\doxysubsubsection{\texorpdfstring{readAt()}{readAt()}}
+{\footnotesize\ttfamily void Buffer\+::read\+At (\begin{DoxyParamCaption}\item[{std\+::streamoff}]{offset,  }\item[{\mbox{\hyperlink{structZipCodeRecord}{Zip\+Code\+Record}} \&}]{record }\end{DoxyParamCaption})}
+
+
+
+Seek to an indexed record and unpack it. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em offset} & Byte position of the record\textquotesingle{}s length prefix. \\
+\hline
+{\em record} & Destination ZIP record. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classBuffer_ad51a73d171857354734784a6d518e3a5}\label{classBuffer_ad51a73d171857354734784a6d518e3a5} 
+\index{Buffer@{Buffer}!readFields@{readFields}}
+\index{readFields@{readFields}!Buffer@{Buffer}}
+\doxysubsubsection{\texorpdfstring{readFields()}{readFields()}}
+{\footnotesize\ttfamily bool Buffer\+::read\+Fields (\begin{DoxyParamCaption}\item[{std\+::istream \&}]{source,  }\item[{std\+::vector$<$ std\+::string $>$ \&}]{fields }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Read one logical CSV record. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em source} & Stream containing the CSV data. \\
+\hline
+{\em fields} & Destination for parsed fields. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+False at end of file; true when a record is available. 
+\end{DoxyReturn}
+\Hypertarget{classBuffer_a3dff9c74fc70214eed61605335cfbda5}\label{classBuffer_a3dff9c74fc70214eed61605335cfbda5} 
+\index{Buffer@{Buffer}!unpackFields@{unpackFields}}
+\index{unpackFields@{unpackFields}!Buffer@{Buffer}}
+\doxysubsubsection{\texorpdfstring{unpackFields()}{unpackFields()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structZipCodeRecord}{Zip\+Code\+Record}} Buffer\+::unpack\+Fields (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ std\+::string $>$ \&}]{fields }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Validate a parsed row using the current column mapping. 
+
+Validate fields and construct one ZIP record. \texorpdfstring{$<$}{<} Retain county for the complete lookup output.\Hypertarget{classBuffer_a594a94fa8c3073fbd357a8aa143255d7}\label{classBuffer_a594a94fa8c3073fbd357a8aa143255d7} 
+\index{Buffer@{Buffer}!writeRecord@{writeRecord}}
+\index{writeRecord@{writeRecord}!Buffer@{Buffer}}
+\doxysubsubsection{\texorpdfstring{writeRecord()}{writeRecord()}}
+{\footnotesize\ttfamily void Buffer\+::write\+Record (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{output,  }\item[{const \mbox{\hyperlink{structZipCodeRecord}{Zip\+Code\+Record}} \&}]{record }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Write one length-\/indicated ZIP record. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em output} & Binary-\/mode data stream positioned after the header or previous record. \\
+\hline
+{\em record} & ZIP record to serialize in the header\textquotesingle{}s canonical field order. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{Buffer_8h}{Buffer.\+h}}\item 
+\mbox{\hyperlink{Buffer_8cpp}{Buffer.\+cpp}}\end{DoxyCompactItemize}

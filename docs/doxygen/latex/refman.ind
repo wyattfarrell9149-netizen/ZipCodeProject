@@ -1,0 +1,101 @@
+\begin{theindex}
+
+  \item {Block}, \hyperpage{5}
+  \item {BlockBuffer}, \hyperpage{5}
+  \item {BlockHeader}, \hyperpage{6}
+  \item {Buffer}, \hyperpage{7}
+    \subitem {Buffer}, \hyperpage{8}
+    \subitem {next}, \hyperpage{9}
+    \subitem {readAt}, \hyperpage{9}
+    \subitem {readFields}, \hyperpage{9}
+    \subitem {unpackFields}, \hyperpage{10}
+    \subitem {writeRecord}, \hyperpage{10}
+  \item {Buffer.cpp}, \hyperpage{17}
+  \item {Buffer.h}, \hyperpage{17}
+  \item {buildIndex}
+    \subitem {Main.cpp}, \hyperpage{21}
+
+  \indexspace
+
+  \item {DataHeader}, \hyperpage{10}
+
+  \indexspace
+
+  \item {HeaderBuffer}, \hyperpage{11}
+    \subitem {read}, \hyperpage{11}
+    \subitem {write}, \hyperpage{12}
+  \item {HeaderBuffer.cpp}, \hyperpage{18}
+  \item {HeaderBuffer.h}, \hyperpage{19}
+
+  \indexspace
+
+  \item {IndexEntry}, \hyperpage{12}
+  \item {IndexEntry.h}, \hyperpage{20}
+
+  \indexspace
+
+  \item {loadIndex}
+    \subitem {Main.cpp}, \hyperpage{21}
+
+  \indexspace
+
+  \item {main}
+    \subitem {Main.cpp}, \hyperpage{23}
+  \item {Main.cpp}, \hyperpage{20}
+    \subitem {buildIndex}, \hyperpage{21}
+    \subitem {loadIndex}, \hyperpage{21}
+    \subitem {main}, \hyperpage{23}
+    \subitem {printExtremes}, \hyperpage{23}
+    \subitem {searchZipCodes}, \hyperpage{23}
+
+  \indexspace
+
+  \item {next}
+    \subitem {Buffer}, \hyperpage{9}
+
+  \indexspace
+
+  \item {printExtremes}
+    \subitem {Main.cpp}, \hyperpage{23}
+
+  \indexspace
+
+  \item {read}
+    \subitem {HeaderBuffer}, \hyperpage{11}
+  \item {readAt}
+    \subitem {Buffer}, \hyperpage{9}
+  \item {readFields}
+    \subitem {Buffer}, \hyperpage{9}
+  \item {RecordBuffer}, \hyperpage{13}
+
+  \indexspace
+
+  \item {searchZipCodes}
+    \subitem {Main.cpp}, \hyperpage{23}
+  \item {SequenceSet}, \hyperpage{13}
+  \item {SequenceSet.cpp}, \hyperpage{24}
+  \item {SequenceSet.h}, \hyperpage{24}
+  \item {State}, \hyperpage{14}
+    \subitem {State}, \hyperpage{15}
+    \subitem {update}, \hyperpage{15}
+  \item {State.h}, \hyperpage{25}
+
+  \indexspace
+
+  \item {unpackFields}
+    \subitem {Buffer}, \hyperpage{10}
+  \item {update}
+    \subitem {State}, \hyperpage{15}
+
+  \indexspace
+
+  \item {write}
+    \subitem {HeaderBuffer}, \hyperpage{12}
+  \item {writeRecord}
+    \subitem {Buffer}, \hyperpage{10}
+
+  \indexspace
+
+  \item {ZipCodeRecord}, \hyperpage{16}
+
+\end{theindex}

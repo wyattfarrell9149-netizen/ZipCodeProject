@@ -1,0 +1,29 @@
+\doxysection{Record\+Buffer Class Reference}
+\hypertarget{classRecordBuffer}{}\label{classRecordBuffer}\index{RecordBuffer@{RecordBuffer}}
+
+
+Convert between a length-\/indicated record and a record object.  
+
+
+
+
+{\ttfamily \#include $<$Sequence\+Set.\+h$>$}
+
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classRecordBuffer_a767148cdd8fc325b4f11a11d4d6d8b34}\label{classRecordBuffer_a767148cdd8fc325b4f11a11d4d6d8b34} 
+static std\+::string {\bfseries pack} (const \mbox{\hyperlink{structZipCodeRecord}{Zip\+Code\+Record}} \&record)
+\begin{DoxyCompactList}\small\item\em Pack a record using the Project 2 writer. \end{DoxyCompactList}\item 
+\Hypertarget{classRecordBuffer_a81edeb03a0c28c9ea894a820a42be0dc}\label{classRecordBuffer_a81edeb03a0c28c9ea894a820a42be0dc} 
+static \mbox{\hyperlink{structZipCodeRecord}{Zip\+Code\+Record}} {\bfseries unpack} (std\+::istream \&input)
+\begin{DoxyCompactList}\small\item\em Read a length prefix and unpack one record from a block. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Convert between a length-\/indicated record and a record object. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{SequenceSet_8h}{Sequence\+Set.\+h}}\item 
+\mbox{\hyperlink{SequenceSet_8cpp}{Sequence\+Set.\+cpp}}\end{DoxyCompactItemize}

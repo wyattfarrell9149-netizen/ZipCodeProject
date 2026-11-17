@@ -1,7 +1,16 @@
-Build: g++ -std=c++17 -Wall -Wextra -Wpedantic Main.cpp Buffer.cpp -o myprogram
-Build completed with no warnings.
-Both input files contain 40,933 records.
-Both runs produced byte-identical tables (57 state/postal IDs).
-All four extremes for every ID matched an independent Python calculation.
-Quoted comma fields, coordinate ties, invalid coordinates, and missing input checked.
-Doxygen PDF has NOT been generated: doxygen is unavailable in this environment.
+Developer verification of Project 3
+
+C++17 compilation passed with -Wall -Wextra -Wpedantic -Werror.
+The supplied 40,933-record CSV converted to Project 2 format, then to 7,854
+512-byte blocks. Header, active links, available links, record counts, index,
+and minimum occupancy passed validation.
+The four demonstrated ZIP lookups returned expected results.
+The blocked state-extremes table matched the original CSV table byte for byte.
+
+The 256-byte example passed every required update scenario and reopened
+validation after each operation. Available block 1 was reused by a split,
+producing physical order 0,1,2 and logical order 0,2,1.
+
+A temporary regression run performed 180 mixed additions/deletions and checked
+all 70 candidate lookups after each operation. It verified duplicate-batch
+rollback, deletion to an empty file, and insertion into the empty file.

@@ -1,0 +1,29 @@
+\doxysection{Sequence\+Set.\+h File Reference}
+\hypertarget{SequenceSet_8h}{}\label{SequenceSet_8h}\index{SequenceSet.h@{SequenceSet.h}}
+
+
+Fixed-\/size linked blocks and their highest-\/key primary index.  
+
+
+{\ttfamily \#include "{}Buffer.\+h"{}}\newline
+{\ttfamily \#include $<$filesystem$>$}\newline
+{\ttfamily \#include $<$functional$>$}\newline
+{\ttfamily \#include $<$map$>$}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classRecordBuffer}{Record\+Buffer}}
+\begin{DoxyCompactList}\small\item\em Convert between a length-\/indicated record and a record object. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structBlock}{Block}}
+\begin{DoxyCompactList}\small\item\em One active block or one available-\/list node. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structBlockHeader}{Block\+Header}}
+\begin{DoxyCompactList}\small\item\em Metadata for a version 3 blocked sequence set. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classBlockBuffer}{Block\+Buffer}}
+\begin{DoxyCompactList}\small\item\em Read and write complete fixed-\/size blocks. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classSequenceSet}{Sequence\+Set}}
+\begin{DoxyCompactList}\small\item\em Search and modify a disk sequence set while keeping only its index in RAM. Updates use a temporary copy and commit after validation. Run one writer at a time. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Fixed-\/size linked blocks and their highest-\/key primary index. 
+

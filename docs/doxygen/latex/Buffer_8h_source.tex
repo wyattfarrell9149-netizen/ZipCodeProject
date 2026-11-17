@@ -1,0 +1,48 @@
+\doxysection{Buffer.\+h}
+\hypertarget{Buffer_8h_source}{}\label{Buffer_8h_source}\mbox{\hyperlink{Buffer_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#ifndef\ ZIP\_BUFFER\_H}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#define\ ZIP\_BUFFER\_H}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{HeaderBuffer_8h}{HeaderBuffer.h}}"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <array>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <fstream>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structZipCodeRecord}{ZipCodeRecord}}\ \{}
+\DoxyCodeLine{00014\ \ \ \ \ std::string\ \mbox{\hyperlink{structZipCodeRecord_a3b0efac463e575a7f266990d1c8fe1f1}{zip}};\ \ \ }
+\DoxyCodeLine{00015\ \ \ \ \ std::string\ \mbox{\hyperlink{structZipCodeRecord_a2ab0748f4221e1039f1b33f5f92e7e75}{place}};\ }
+\DoxyCodeLine{00016\ \ \ \ \ std::string\ \mbox{\hyperlink{structZipCodeRecord_a831a44c6a908084952075b912f293963}{state}};\ }
+\DoxyCodeLine{00017\ \ \ \ \ std::string\ \mbox{\hyperlink{structZipCodeRecord_a5f38f658c9f850fd6efd7d5c7c660d2d}{county}};\ }
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{structZipCodeRecord_a69f7ed91c7dc4c496deb5450a556f2f5}{latitude}}\ =\ 0;\ \ }
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{structZipCodeRecord_a627c754e94e5629ec977067edb056de1}{longitude}}\ =\ 0;\ }
+\DoxyCodeLine{00020\ \};}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00026\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classBuffer}{Buffer}}\ \{}
+\DoxyCodeLine{00028\ \ \ \ \ \mbox{\hyperlink{structZipCodeRecord}{ZipCodeRecord}}\ \mbox{\hyperlink{classBuffer_a3dff9c74fc70214eed61605335cfbda5}{unpackFields}}(\textcolor{keyword}{const}\ std::vector<std::string>\&\ fields);}
+\DoxyCodeLine{00029\ \ \ \ \ \mbox{\hyperlink{classBuffer_a92fd371409790ee64d2ca9bdaec2dd1a}{Buffer}}()\ =\ \textcolor{keywordflow}{default};\ }
+\DoxyCodeLine{00030\ \ \ \ \ std::ifstream\ \mbox{\hyperlink{classBuffer_a6abeb49d8e4ec8f271f44b8b5a30cc0b}{input}};\ }
+\DoxyCodeLine{00031\ \ \ \ \ std::size\_t\ \mbox{\hyperlink{classBuffer_a4437d1f4e3e06644785bdd47aa2f409c}{recordNumber}}\ =\ 0;\ }
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00033\ \ \ \ \ std::array<std::size\_t,\ 6>\ \mbox{\hyperlink{classBuffer_a55f6e81bddbdf500c684c0eeb3491c4f}{columns}}\{\};\ }
+\DoxyCodeLine{00034\ \ \ \ \ std::streampos\ \mbox{\hyperlink{classBuffer_ad039716ccd54b447f3cd6c214a2e14f4}{dataEnd}}\{\};\ }
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classBuffer_a33a3f614933f00793ffc9700b50536c2}{lengthIndicated}}\ =\ \textcolor{keyword}{false};\ }
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classBuffer_ad51a73d171857354734784a6d518e3a5}{readFields}}(std::istream\&\ source,\ std::vector<std::string>\&\ fields);}
+\DoxyCodeLine{00043\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{structZipCodeRecord}{ZipCodeRecord}}\ \mbox{\hyperlink{classBuffer_a285bf13ca999eccc7b0a55b8c09ff008}{unpack}}(\textcolor{keyword}{const}\ std::string\&\ payload);}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keyword}{explicit}\ \mbox{\hyperlink{classBuffer_a92fd371409790ee64d2ca9bdaec2dd1a}{Buffer}}(\textcolor{keyword}{const}\ std::string\&\ filename);}
+\DoxyCodeLine{00052\ \ \ \ \ }
+\DoxyCodeLine{00057\ \ \ \ \ \mbox{\hyperlink{classBuffer_a92fd371409790ee64d2ca9bdaec2dd1a}{Buffer}}(\textcolor{keyword}{const}\ std::string\&\ filename,\ \mbox{\hyperlink{structDataHeader}{DataHeader}}\&\ header);}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00063\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classBuffer_a594a94fa8c3073fbd357a8aa143255d7}{writeRecord}}(std::ostream\&\ output,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structZipCodeRecord}{ZipCodeRecord}}\&\ record);}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classBuffer_abf2a3adbe53fe807e40e71009afd0e18}{readAt}}(std::streamoff\ offset,\ \mbox{\hyperlink{structZipCodeRecord}{ZipCodeRecord}}\&\ record);}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{classBuffer_a6bd108ae36775bac2282245a20aacd28}{next}}(\mbox{\hyperlink{structZipCodeRecord}{ZipCodeRecord}}\&\ record);}
+\DoxyCodeLine{00077\ \};}
+\DoxyCodeLine{00078\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

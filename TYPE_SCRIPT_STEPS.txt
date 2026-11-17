@@ -1,0 +1,91 @@
+Project 3 typescript recording steps
+
+Run these commands in the ZipCode3 directory in a Linux or Codespaces terminal.
+The script command starts recording. The exit command ends that recording.
+The supplied examples use synthetic ZIP records so each block change is easy to see.
+
+1. Record the build, default block file, search, and extremes comparison.
+
+script project3_build_search.typescript
+g++ -std=c++17 -Wall -Wextra -Wpedantic Main.cpp Buffer.cpp HeaderBuffer.cpp SequenceSet.cpp -o myprogram
+./myprogram --build us_postal_codes.csv project2_data.txt
+./myprogram --block-build project2_data.txt recorded_blocks.txt
+./myprogram --check recorded_blocks.txt
+./myprogram --search recorded_blocks.txt -Z00501 -Z56301 -Z90210 -Z00000
+./myprogram us_postal_codes.csv > csv_extremes.txt
+./myprogram --block-extremes recorded_blocks.txt > block_extremes.txt
+cat block_extremes.txt
+diff csv_extremes.txt block_extremes.txt
+exit
+
+Expected: 40,933 records, successful lookups for the three valid keys, a missing
+message for 00000, and no diff output. This uses 512-byte blocks and 50% minimum.
+
+2. Record the small example and all five required modification cases.
+
+script project3_updates.typescript
+./myprogram --build tests/small.csv small_source.txt
+./myprogram --block-build small_source.txt recorded_small.txt 256
+./myprogram --dump recorded_small.txt physical
+./myprogram --dump recorded_small.txt logical
+./myprogram --dump recorded_small.txt index
+./myprogram --search recorded_small.txt -Z10010 -Z10180 -Z10015
+
+The initial file has three blocks, six records in each. The physical and logical
+orders match. Key 10015 is missing from an indexed block.
+
+Run these commands next, inside the same recording:
+
+./myprogram --delete recorded_small.txt tests/trim.txt
+./myprogram --check recorded_small.txt
+./myprogram --dump recorded_small.txt logical
+
+This removes 10010, 10020, and 10030 without a merge or redistribution.
+Block 0 now holds three records.
+
+./myprogram --delete recorded_small.txt tests/redistribute.txt
+./myprogram --check recorded_small.txt
+./myprogram --dump recorded_small.txt logical
+./myprogram --dump recorded_small.txt index
+
+Deleting 10040 causes redistribution between blocks 0 and 1, leaving four
+records in each. The log reports redistribution and the changed index entry.
+
+./myprogram --delete recorded_small.txt tests/delete_only.txt
+./myprogram --check recorded_small.txt
+./myprogram --dump recorded_small.txt logical
+
+Deleting 10050 leaves three records in block 0 without reorganizing the blocks.
+
+./myprogram --delete recorded_small.txt tests/merge.txt
+./myprogram --check recorded_small.txt
+./myprogram --dump recorded_small.txt physical
+./myprogram --dump recorded_small.txt index
+
+Deleting 10060 merges blocks 0 and 1. Block 1 becomes available and its entry
+is removed from the index. The dump shows Avail Head 1.
+
+./myprogram --add recorded_small.txt tests/split.csv
+./myprogram --check recorded_small.txt
+./myprogram --dump recorded_small.txt physical
+./myprogram --dump recorded_small.txt logical
+./myprogram --dump recorded_small.txt index
+
+Adding 10135 splits block 2 and reuses available block 1. Logical order is
+0, 2, 1. Physical order is 0, 1, 2. Avail Head returns to -1.
+
+./myprogram --add recorded_small.txt tests/add.csv
+./myprogram --check recorded_small.txt
+./myprogram --dump recorded_small.txt logical
+./myprogram --dump recorded_small.txt index
+./myprogram --search recorded_small.txt -Z10135 -Z10185 -Z10010 -Z10040 -Z10050 -Z10060
+exit
+
+Adding 10185 fits without a split and changes the highest key in block 1.
+The final lookup finds the added records and reports the deleted keys missing.
+
+Use fresh output names when repeating a build. Existing blocked files are
+protected from accidental replacement. Keep each output beside its generated
+index, whose name is the complete data filename followed by _index.txt.
+You can submit the two typescripts together. The assignment describes a script
+file, so you may also record both sections within one script session.

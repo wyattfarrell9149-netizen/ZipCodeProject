@@ -1,0 +1,50 @@
+Changes from the supplied Project 2 submission
+
+Main.cpp
+Added the Project 3 command branches and an extremes reader for active blocks.
+The existing Project 2 build and search modes and display helpers are retained.
+
+Buffer.h and Buffer.cpp
+Moved the existing field validation into unpackFields so it can be shared.
+Added unpack to parse a record payload supplied by a block. The existing CSV
+tokenizer, column mapping, length-indicated reader, record writer, and their
+Doxygen comments are reused.
+
+HeaderBuffer.h
+Added the blocked header size and readBlocked/writeBlocked declarations.
+Their implementation is in SequenceSet.cpp with the version 3 metadata.
+The version 1 header code remains usable for Project 2 input.
+
+SequenceSet.h and SequenceSet.cpp
+Added BlockHeader, Block, RecordBuffer, BlockBuffer, and SequenceSet.
+These handle equal-size blocks, highest-key indexing, linked active and available
+blocks, dumps, insertion, deletion, splits, redistribution, merges, validation,
+and saving updates. New classes and methods have Doxygen comments.
+
+Doxyfile
+Changed the project title and added the new source files to INPUT.
+
+State.h and IndexEntry.h retain their Project 2 contents.
+
+Implementation decisions
+The header reserves 1024 bytes. Each block reserves 64 bytes for count and links.
+Minimum occupancy is measured against the bytes available for record payloads.
+RBNs start at zero and -1 marks the end of a list.
+Block size defaults to 512 and minimum occupancy to 50 percent. Both are
+command-line settings and are stored in the header. The supported minimum
+range is 1 through 50 percent.
+
+With indivisible variable-length records, some combinations cannot be divided
+into two blocks that both satisfy an exact byte occupancy threshold. Such an
+update is rejected without changing the original pair. A lower configured
+minimum can accommodate these cases. Oversized records are also rejected.
+
+Addition and deletion batches are performed on a temporary disk copy, then
+validated and committed with backup files for rollback on ordinary I/O errors.
+This keeps RAM use bounded but copies the disk file once per batch. Use one
+writer at a time. The paired rename is not a power-failure-atomic transaction.
+If execution is interrupted during commit, inspect the .bak data and index pair
+before starting another writer.
+
+The companion filename is derived from the data filename and recorded in the
+header. Version 3 files produced by this program use the schema described there.

@@ -1,0 +1,87 @@
+\doxysection{Header\+Buffer Class Reference}
+\hypertarget{classHeaderBuffer}{}\label{classHeaderBuffer}\index{HeaderBuffer@{HeaderBuffer}}
+
+
+Reads and writes data file headers and fixed-\/width ASCII size fields.  
+
+
+
+
+{\ttfamily \#include $<$Header\+Buffer.\+h$>$}
+
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classHeaderBuffer_aaca5b174ab295ec461a69a8f2d14e51d}\label{classHeaderBuffer_aaca5b174ab295ec461a69a8f2d14e51d} 
+static \mbox{\hyperlink{structBlockHeader}{Block\+Header}} {\bfseries read\+Blocked} (std\+::istream \&input)
+\begin{DoxyCompactList}\small\item\em Read a version 3 blocked file header. \end{DoxyCompactList}\item 
+\Hypertarget{classHeaderBuffer_a31509b295d84d1b01e54732841091363}\label{classHeaderBuffer_a31509b295d84d1b01e54732841091363} 
+static void {\bfseries write\+Blocked} (std\+::ostream \&output, const \mbox{\hyperlink{structBlockHeader}{Block\+Header}} \&header)
+\begin{DoxyCompactList}\small\item\em Write a version 3 header at byte zero. \end{DoxyCompactList}\item 
+static \mbox{\hyperlink{structDataHeader}{Data\+Header}} \mbox{\hyperlink{classHeaderBuffer_a09ed553923fb61b202a5da9d0c5fb07d}{read}} (std\+::istream \&input)
+\begin{DoxyCompactList}\small\item\em Read and validate metadata from the start of a data stream. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{classHeaderBuffer_a1a96dce39d0a7d6054ca3a41eb655e7d}{write}} (std\+::ostream \&output, const \mbox{\hyperlink{structDataHeader}{Data\+Header}} \&header)
+\begin{DoxyCompactList}\small\item\em Write the header at the current output position. \end{DoxyCompactList}\item 
+\Hypertarget{classHeaderBuffer_a6ecbc7e5a7e84fbf5ff78ba535f75448}\label{classHeaderBuffer_a6ecbc7e5a7e84fbf5ff78ba535f75448} 
+static unsigned long long {\bfseries read\+Size} (std\+::istream \&input, unsigned int width)
+\begin{DoxyCompactList}\small\item\em Read exactly width ASCII digits and return their unsigned value. \end{DoxyCompactList}\item 
+\Hypertarget{classHeaderBuffer_a8980bb53cd5f02228a9cc03def65e3a2}\label{classHeaderBuffer_a8980bb53cd5f02228a9cc03def65e3a2} 
+static void {\bfseries write\+Size} (std\+::ostream \&output, unsigned long long size, unsigned int width)
+\begin{DoxyCompactList}\small\item\em Write a size as exactly width zero-\/padded ASCII digits. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\Hypertarget{classHeaderBuffer_a097f82d05d96872092b61561b48d14a3}\label{classHeaderBuffer_a097f82d05d96872092b61561b48d14a3} 
+static constexpr std\+::size\+\_\+t {\bfseries blocked\+Header\+Size} = 1024
+\begin{DoxyCompactList}\small\item\em Fixed version 3 header bytes. \end{DoxyCompactList}\item 
+\Hypertarget{classHeaderBuffer_a3c56f2623f1172dbaa40a85b1f93c317}\label{classHeaderBuffer_a3c56f2623f1172dbaa40a85b1f93c317} 
+static constexpr unsigned int {\bfseries record\+Size\+Width} = 10
+\begin{DoxyCompactList}\small\item\em Bytes per data record length. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Reads and writes data file headers and fixed-\/width ASCII size fields. 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classHeaderBuffer_a09ed553923fb61b202a5da9d0c5fb07d}\label{classHeaderBuffer_a09ed553923fb61b202a5da9d0c5fb07d} 
+\index{HeaderBuffer@{HeaderBuffer}!read@{read}}
+\index{read@{read}!HeaderBuffer@{HeaderBuffer}}
+\doxysubsubsection{\texorpdfstring{read()}{read()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structDataHeader}{Data\+Header}} Header\+Buffer\+::read (\begin{DoxyParamCaption}\item[{std\+::istream \&}]{input }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Read and validate metadata from the start of a data stream. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em input} & Binary-\/mode data stream. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Header metadata. The stream is positioned at the first data record. 
+\end{DoxyReturn}
+\Hypertarget{classHeaderBuffer_a1a96dce39d0a7d6054ca3a41eb655e7d}\label{classHeaderBuffer_a1a96dce39d0a7d6054ca3a41eb655e7d} 
+\index{HeaderBuffer@{HeaderBuffer}!write@{write}}
+\index{write@{write}!HeaderBuffer@{HeaderBuffer}}
+\doxysubsubsection{\texorpdfstring{write()}{write()}}
+{\footnotesize\ttfamily void Header\+Buffer\+::write (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{output,  }\item[{const \mbox{\hyperlink{structDataHeader}{Data\+Header}} \&}]{header }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Write the header at the current output position. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em output} & Binary-\/mode stream positioned at the start of the file. \\
+\hline
+{\em header} & Metadata to write. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{HeaderBuffer_8h}{Header\+Buffer.\+h}}\item 
+\mbox{\hyperlink{HeaderBuffer_8cpp}{Header\+Buffer.\+cpp}}\item 
+\mbox{\hyperlink{SequenceSet_8cpp}{Sequence\+Set.\+cpp}}\end{DoxyCompactItemize}

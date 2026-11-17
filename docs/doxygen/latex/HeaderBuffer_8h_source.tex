@@ -1,0 +1,36 @@
+\doxysection{Header\+Buffer.\+h}
+\hypertarget{HeaderBuffer_8h_source}{}\label{HeaderBuffer_8h_source}\mbox{\hyperlink{HeaderBuffer_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#ifndef\ ZIP\_HEADER\_BUFFER\_H}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#define\ ZIP\_HEADER\_BUFFER\_H}}
+\DoxyCodeLine{00006\ }
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <iosfwd>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structBlockHeader}{BlockHeader}};}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structDataHeader}{DataHeader}}\ \{}
+\DoxyCodeLine{00014\ \ \ \ \ std::string\ \mbox{\hyperlink{structDataHeader_a32cdc7a5e5853bc9a79989d5203a54d9}{indexFilename}};\ }
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ \mbox{\hyperlink{structDataHeader_af0dd721cad6734a4ea9af993d3eba3a2}{recordCount}}\ =\ 0;\ }
+\DoxyCodeLine{00016\ \ \ \ \ std::streamoff\ \mbox{\hyperlink{structDataHeader_a967753d1326af8a1b7c24c9eb7f6bad2}{headerSize}}\ =\ 0;\ }
+\DoxyCodeLine{00017\ \};}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classHeaderBuffer}{HeaderBuffer}}\ \{}
+\DoxyCodeLine{00021\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ std::size\_t\ \mbox{\hyperlink{classHeaderBuffer_a097f82d05d96872092b61561b48d14a3}{blockedHeaderSize}}\ =\ 1024;\ }
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{structBlockHeader}{BlockHeader}}\ \mbox{\hyperlink{classHeaderBuffer_aaca5b174ab295ec461a69a8f2d14e51d}{readBlocked}}(std::istream\&\ input);}
+\DoxyCodeLine{00026\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classHeaderBuffer_a31509b295d84d1b01e54732841091363}{writeBlocked}}(std::ostream\&\ output,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structBlockHeader}{BlockHeader}}\&\ header);}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{classHeaderBuffer_a3c56f2623f1172dbaa40a85b1f93c317}{recordSizeWidth}}\ =\ 10;\ }
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{structDataHeader}{DataHeader}}\ \mbox{\hyperlink{classHeaderBuffer_a09ed553923fb61b202a5da9d0c5fb07d}{read}}(std::istream\&\ input);}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classHeaderBuffer_a1a96dce39d0a7d6054ca3a41eb655e7d}{write}}(std::ostream\&\ output,\ \textcolor{keyword}{const}\ \mbox{\hyperlink{structDataHeader}{DataHeader}}\&\ header);}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ \mbox{\hyperlink{classHeaderBuffer_a6ecbc7e5a7e84fbf5ff78ba535f75448}{readSize}}(std::istream\&\ input,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ width);}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classHeaderBuffer_a8980bb53cd5f02228a9cc03def65e3a2}{writeSize}}(std::ostream\&\ output,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ size,\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ width);}
+\DoxyCodeLine{00046\ \};}
+\DoxyCodeLine{00047\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}
